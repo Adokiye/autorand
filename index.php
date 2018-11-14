@@ -1,4 +1,53 @@
 <?php
+// 8 zeros(9)
+use AfricasTalking\SDK\AfricasTalking;
+$username = "sandbox";
+$apikey   = "ff4bd028356602b0aff181d10bdf8889c926052df21f52e35da1bc5007cace1c";
+$AT       = new AfricasTalking($username, $apiKey);
+$payments   = $AT->payments();
+$bank_code = '';
+$totality = false;
+$skylark = false;
+function BankValidate($otp, $transactionId) {
+    try {
+        $result = $payments->bankCheckoutValidate([
+            "transactionId" => $transactionId,
+            "otp"           => $otp
+        ]);
+        return $result;
+    } catch (Exception $e) {
+        echo "Error: ".$e.getMessage();
+    }
+}
+function BankCheckout($accountName, $accountNumber, $bankCode, $dateOfBirth) {
+    $productName = "Registration";
+    $bankAccount = [
+        "accountName"   => $accountName,
+        "accountNumber" => $accountNumber,
+        "bankCode"      => $bankCode,
+        "dateOfBirth"   => $dateOfBirth 
+    ];
+    $currencyCode       = "NGN";
+    $amount             = 200;
+    $narration          = "Registration charge";
+    $metadata = [
+        "agentId"   => "555",
+        "productId" => "1111"
+    ];
+    try {
+        $result = $payments->bankCheckoutCharge([
+            "productName"  => $productName,
+            "bankAccount"  => $bankAccount,
+            "currencyCode" => $currencyCode,
+            "amount"       => $amount,
+            "narration"    => $narration,
+            "metadata"     => $metadata
+        ]);
+        return $result;
+    } catch(Exception $e) {
+        echo "Error: ".$e.getMessage();
+    }
+}
 require("connections.php");
 $conn = conn();
 // add referral option in menu
@@ -65,18 +114,91 @@ if($pieces[2] && !empty($pieces[2])){
     $response = "CON Please enter the phone number of who referred you \n";
 }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
 && $pieces[5] && $pieces[5] == '2'){
-    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`, `patron_id`)
-                                                    VALUES ('$phoneNumber',
-                                                    '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
-                                                    '" . mysqli_real_escape_string($conn, $pieces[3]) . "',
-                                                    '$pieces[0]',
-                                                     '" . mysqli_real_escape_string($conn, $pieces[4]) . "',
-                                                    '$pieces[1]',)";
-                    $save_user = sqlInsert($sql);
-    $response = "END Congratulations you\'ll be contacted soon";
+    $response = "CON You\'ll be charged 200 naira from your bank account for you to be fully registered, 
+    this amount will be included in your wallet, you\'ll be required to input your bank account number 
+    and bank account name, then an OTP will be sent to you, which you will input in the required space 
+    when you\'re asked to, proceed? \n";
+    $response .= "1. Yes \n";
+    $response .= "2. No \n";
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '2' && $pieces[6] && in_array($pieces[6], ['1', '2'])){
+    if($pieces[6] == '2'){
+    $response = "END Thank you for your time";    
+    }else{
+    $response = "CON Please select your bank \n";
+    $response .= "1. FCMB Nigeria \n";
+    $response .= "2. Zenith Nigeria \n";
+    $response .= "3. Access Nigeria \n";
+    $response .= "4. Providus Nigeria \n";
+    $response .= "5. Sterling Nigeria \n";
+    $response .= "6. None of the above \n";   
+    /*
+    FCMB Nigeria
+    234001
+    Zenith Nigeria
+    234002
+    Access Nigeria
+    234003
+    Providus Nigeria
+    234007
+    Sterling Nigeria
+    234010   
+    */ 
+    }   
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '2' && $pieces[6] && in_array($pieces[6], ['1']) && $pieces[7] && 
+in_array($pieces[7], ['1','2','3','4','5'])){
+    if($pieces[7] == '1'){
+        $bank_code = 234001;
+    }else if($pieces[7] == '2'){
+        $bank_code = 234002;
+    }else if($pieces[7] == '3'){
+        $bank_code = 234003;
+    }else if($pieces[7] == '4'){
+        $bank_code = 234007;
+    }else if($pieces[7] == '5'){
+        $bank_code = 234010;
+    }
+    $response = "CON Please enter your bank account name \n";      
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '2' && $pieces[6] && in_array($pieces[6], ['1']) && $pieces[7] && 
+in_array($pieces[7], ['1','2','3','4','5']) && $pieces[8] && !empty($pieces[8])){
+    $response = "CON Please enter your bank account number \n";      
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '2' && $pieces[6] && in_array($pieces[6], ['1']) && $pieces[7] && 
+in_array($pieces[7], ['1','2','3','4','5']) && $pieces[8] && !empty($pieces[8]) && $pieces[9] && !empty($pieces[9])){
+    $response = "CON Please enter your date of birth \n";      
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '2' && $pieces[6] && in_array($pieces[6], ['1']) && $pieces[7] && 
+in_array($pieces[7], ['1','2','3','4','5']) && $pieces[8] && !empty($pieces[8]) && $pieces[9] && !empty($pieces[9])
+&& $pieces[10] && !empty($pieces[10])){
+    $result = BankCheckout($pieces[8],$pieces[9],$bank_code, $pieces[10]);
+    if($result->status == 'PendingValidation'){
+    $totality == true;    
+    $response = "CON Please enter the OTP sent to you \n";    
+    }else{
+    $response = "END".$response->description;    
+    }         
+}else if( $totality && $pieces[11] && !empty($pieces[11])){
+    $result_v = BankValidate($pieces[11], $result->transactionId);
+    if($result_v->status == 'Success'){
+        $skylark = true;
+        $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`, 
+        `patron_id`, `paid`)
+        VALUES ('$phoneNumber',
+        '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
+        '" . mysqli_real_escape_string($conn, $pieces[3]) . "',
+        '$pieces[0]',
+         '" . mysqli_real_escape_string($conn, $pieces[4]) . "',
+        '$pieces[1]', true)";
+$save_user = sqlInsert($sql);    
+    $response = "END Congratulations you\'ve successfully registered";   
+    }else{
+    $response = "END".$result_v->description;    
+    }         
 }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
 && $pieces[5] && $pieces[5] == '1' && $pieces[6] && !empty($pieces[6])){
-    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`, `patron_id`)
+ /*   $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`, `patron_id`)
                                                     VALUES ('$phoneNumber',
                                                     '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
                                                     '" . mysqli_real_escape_string($conn, $pieces[3]) . "',
@@ -92,8 +214,101 @@ if($pieces[2] && !empty($pieces[2])){
     $response = "END Congratulations you\'ll be contacted soon";     
     }else{
     $response = "END There was a problem while inserting your referral, please try again later";    
+    }                */
+    $response = "CON You\'ll be charged 200 naira from your bank account for you to be fully registered, 
+    this amount will be included in your wallet, you\'ll be required to input your bank account number 
+    and bank account name, then an OTP will be sent to you, which you will input in the required space 
+    when you\'re asked to, proceed? \n";
+    $response .= "1. Yes \n";
+    $response .= "2. No \n";   
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '1' && $pieces[7] && in_array($pieces[7], ['1', '2']) 
+&& $pieces[6] && !empty($pieces[6])){
+    if($pieces[7] == '2'){
+    $response = "END Thank you for your time";    
+    }else{
+    $response = "CON Please select your bank \n";
+    $response .= "1. FCMB Nigeria \n";
+    $response .= "2. Zenith Nigeria \n";
+    $response .= "3. Access Nigeria \n";
+    $response .= "4. Providus Nigeria \n";
+    $response .= "5. Sterling Nigeria \n";
+    $response .= "6. None of the above \n";   
+    /*
+    FCMB Nigeria
+    234001
+    Zenith Nigeria
+    234002
+    Access Nigeria
+    234003
+    Providus Nigeria
+    234007
+    Sterling Nigeria
+    234010   
+    */ 
+    }   
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '1' 
+&& $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1']) && $pieces[8] && 
+in_array($pieces[8], ['1','2','3','4','5'])){
+    if($pieces[8] == '1'){
+        $bank_code = 234001;
+    }else if($pieces[8] == '2'){
+        $bank_code = 234002;
+    }else if($pieces[8] == '3'){
+        $bank_code = 234003;
+    }else if($pieces[8] == '4'){
+        $bank_code = 234007;
+    }else if($pieces[8] == '5'){
+        $bank_code = 234010;
+    }
+    $response = "CON Please enter your bank account name \n";      
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '1' 
+&& $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1']) && $pieces[8] && 
+in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9])){
+    $response = "CON Please enter your bank account number \n";      
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '1' && $pieces[6] && !empty($pieces[6]) && $pieces[7] &&
+ in_array($pieces[7], ['1']) && $pieces[8] && in_array($pieces[8], ['1','2','3','4','5']) 
+ && $pieces[9] && !empty($pieces[9]) && $pieces[10] && !empty($pieces[10])){
+    $response = "CON Please enter your date of birth \n";      
+}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+&& $pieces[5] && $pieces[5] == '1'
+&& $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1']) && $pieces[8] && 
+in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9]) && $pieces[10] && !empty($pieces[10])
+ && $pieces[11] && !empty($pieces[11])){
+    $result = BankCheckout($pieces[9],$pieces[10],$bank_code, $pieces[11]);
+    if($result->status == 'PendingValidation'){
+    $totality = true;
+    $response = "CON Please enter the OTP sent to you \n";    
+    }else{
+    $response = "END".$response->description;    
+    }         
+}else if($totality && $pieces[12] && !empty($pieces[12])){
+    $result_v = BankValidate($pieces[12], $result->transactionId);
+    if($result_v->status == 'Success'){
+     $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`, `patron_id`, `paid`)
+                                                    VALUES ('$phoneNumber',
+                                                    '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
+                                                    '" . mysqli_real_escape_string($conn, $pieces[3]) . "',
+                                                    '$pieces[0]',
+                                                     '" . mysqli_real_escape_string($conn, $pieces[4]) . "',
+                                                    '$pieces[1]', true)";
+                    $save_user = sqlInsert($sql);
+    if($save_user){
+    $sql2 = "INSERT INTO `referrals` (`user_id`, `phone_no`)
+    VALUES ('$conn->insert_id',
+    '" . mysqli_real_escape_string($conn, $pieces[6]) . "')";
+    $save_user2 = sqlInsert($sql2);  
+    $response = "END Congratulations you\'ll be contacted soon";     
+    }else{
+    $response = "END There was a problem while inserting your referral, please try again later";    
     }                
-    
+    $response = "END Congratulations you\'ve successfully registered";   
+    }else{
+    $response = "END".$result_v->description;    
+    }         
 }
 }else if($pieces[1] && !empty($pieces[1])&& !in_array($pieces[1], $numbers)){
     if($pieces[1] && !empty($pieces[1])){
@@ -102,7 +317,7 @@ if($pieces[2] && !empty($pieces[2])){
         $response = "CON Enter vehicle plate number \n";
     }else if($pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2])&& $pieces[1] && !empty($pieces[1])){
     /*    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
-                                                        VALUES ('$phoneNumber',
+            h                                            VALUES ('$phoneNumber',
                                                         '" . mysqli_real_escape_string($conn, $pieces[1]) . "',
                                                         '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
                                                         '$pieces[0]',
@@ -111,20 +326,25 @@ if($pieces[2] && !empty($pieces[2])){
     $response = "CON Please where you referred by anyone \n";
     $response .= "1. Yes \n";
     $response .= "2. No \n";
-    }else if($pieces[4] && $pieces[4] == '1' && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2])){
+    }else if($pieces[4] && $pieces[4] == '1' && $pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2])){
     $response = "CON Please enter the phone number of who referred you \n";    
-    }else if($pieces[4] && $pieces[4] == '2' && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2])){
-        $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
+    }else if($pieces[4] && $pieces[4] == '2' && $pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2])){
+    /*    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
         VALUES ('$phoneNumber',
         '" . mysqli_real_escape_string($conn, $pieces[1]) . "',
         '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
         '$pieces[0]',
          '" . mysqli_real_escape_string($conn, $pieces[3]) . "',)";
-        $save_user = sqlInsert($sql);
-        $response = "END Congratulations you\'ll be contacted soon";        
+        $save_user = sqlInsert($sql); */
+        $response = "CON You\'ll be charged 200 naira from your bank account for you to be fully registered, 
+        this amount will be included in your wallet, you\'ll be required to input your bank account number 
+        and bank account name, then an OTP will be sent to you, which you will input in the required space 
+        when you\'re asked to, proceed? \n";
+        $response .= "1. Yes \n";
+        $response .= "2. No \n";
     }else if($pieces[4] && $pieces[4] == '2' && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2])
-    && $pieces[5] && !empty($pieces[5])){
-        $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
+    && $pieces[5] && !empty($pieces[5]) && $pieces[6] && in_array($pieces[6], ['1','2'])){
+    /*    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
         VALUES ('$phoneNumber',
         '" . mysqli_real_escape_string($conn, $pieces[1]) . "',
         '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
@@ -139,7 +359,30 @@ if($pieces[2] && !empty($pieces[2])){
             $response = "END Congratulations you\'ll be contacted soon";     
             }else{
             $response = "END There was a problem while inserting your referral, please try again later";    
-            }        
+            }    */
+            if($pieces[6] == '2'){
+                $response = "END Thank you for your time";    
+                }else{
+                $response = "CON Please select your bank \n";
+                $response .= "1. FCMB Nigeria \n";
+                $response .= "2. Zenith Nigeria \n";
+                $response .= "3. Access Nigeria \n";
+                $response .= "4. Providus Nigeria \n";
+                $response .= "5. Sterling Nigeria \n";
+                $response .= "6. None of the above \n";   
+                /*
+                FCMB Nigeria
+                234001
+                Zenith Nigeria
+                234002
+                Access Nigeria
+                234003
+                Providus Nigeria
+                234007
+                Sterling Nigeria
+                234010   
+                */ 
+                }    
     }
     }
 }else{
