@@ -57,7 +57,8 @@ $phoneNumber = $_POST["phoneNumber"];
 $text        = $_POST["text"];
 $sql = "SELECT * FROM `users` WHERE `phone_number`='$phoneNumber'";
 $numbers = ['1','2','3','4','5','6'];
-$result = selectSql($sql);
+//$result = selectSql($sql);
+$result = false;
 if(!$result){
 $pieces = explode("*", $text);
 if ($text == "") {    
