@@ -249,7 +249,8 @@ $save_user = sqlInsert($sql);
     }   
 }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
 && $pieces[5] && $pieces[5] == '1' 
-&& $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1']) && $pieces[8] && 
+&& $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1'])
+ && $pieces[8] && 
 in_array($pieces[8], ['1','2','3','4','5'])){
     if($pieces[8] == '1'){
         $bank_code = 234001;
@@ -316,26 +317,12 @@ in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9]) 
     }else if($pieces[2] && !empty($pieces[2]) && $pieces[1] && !empty($pieces[1])){
         $response = "CON Enter vehicle plate number \n";
     }else if($pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2])&& $pieces[1] && !empty($pieces[1])){
-    /*    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
-            h                                            VALUES ('$phoneNumber',
-                                                        '" . mysqli_real_escape_string($conn, $pieces[1]) . "',
-                                                        '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
-                                                        '$pieces[0]',
-                                                         '" . mysqli_real_escape_string($conn, $pieces[3]) . "',)";
-                        $save_embassy = sqlInsert($sql);            */ 
     $response = "CON Please where you referred by anyone \n";
     $response .= "1. Yes \n";
     $response .= "2. No \n";
     }else if($pieces[4] && $pieces[4] == '1' && $pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2])){
     $response = "CON Please enter the phone number of who referred you \n";    
     }else if($pieces[4] && $pieces[4] == '2' && $pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2])){
-    /*    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
-        VALUES ('$phoneNumber',
-        '" . mysqli_real_escape_string($conn, $pieces[1]) . "',
-        '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
-        '$pieces[0]',
-         '" . mysqli_real_escape_string($conn, $pieces[3]) . "',)";
-        $save_user = sqlInsert($sql); */
         $response = "CON You\'ll be charged 200 naira from your bank account for you to be fully registered, 
         this amount will be included in your wallet, you\'ll be required to input your bank account number 
         and bank account name, then an OTP will be sent to you, which you will input in the required space 
@@ -344,22 +331,6 @@ in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9]) 
         $response .= "2. No \n";
     }else if($pieces[4] && $pieces[4] == '2' && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2])
     && $pieces[5] && !empty($pieces[5]) && $pieces[6] && in_array($pieces[6], ['1','2'])){
-    /*    $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`)
-        VALUES ('$phoneNumber',
-        '" . mysqli_real_escape_string($conn, $pieces[1]) . "',
-        '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
-        '$pieces[0]',
-         '" . mysqli_real_escape_string($conn, $pieces[3]) . "',)";
-        $save_user = sqlInsert($sql);
-        if($save_user){
-            $sql2 = "INSERT INTO `referrals` (`user_id`, `phone_no`)
-            VALUES ('$conn->insert_id',
-            '" . mysqli_real_escape_string($conn, $pieces[5]) . "')";
-            $save_user2 = sqlInsert($sql2);  
-            $response = "END Congratulations you\'ll be contacted soon";     
-            }else{
-            $response = "END There was a problem while inserting your referral, please try again later";    
-            }    */
             if($pieces[6] == '2'){
                 $response = "END Thank you for your time";    
                 }else{
@@ -370,19 +341,68 @@ in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9]) 
                 $response .= "4. Providus Nigeria \n";
                 $response .= "5. Sterling Nigeria \n";
                 $response .= "6. None of the above \n";   
-                /*
-                FCMB Nigeria
-                234001
-                Zenith Nigeria
-                234002
-                Access Nigeria
-                234003
-                Providus Nigeria
-                234007
-                Sterling Nigeria
-                234010   
-                */ 
                 }    
+    }else if($pieces[4] && $pieces[4] == '2' && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2])
+    && $pieces[5] && !empty($pieces[5]) && $pieces[6] && in_array($pieces[6], ['1','2'])
+    && $pieces[7] && in_array($pieces[7], ['1','2','3','4','5'])){
+        if($pieces[7] == '1'){
+                $bank_code = 234001;
+            }else if($pieces[7] == '2'){
+                $bank_code = 234002;
+            }else if($pieces[7] == '3'){
+                $bank_code = 234003;
+            }else if($pieces[7] == '4'){
+                $bank_code = 234007;
+            }else if($pieces[7] == '5'){
+                $bank_code = 234010;
+            }
+            $response = "CON Please enter your bank account name \n";   
+    }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+    && $pieces[5] && $pieces[5] == '1' 
+    && $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1']) && $pieces[8] && 
+    in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9])){
+        $response = "CON Please enter your ban                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            k account number \n";      
+    }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
+    && $pieces[5] && $pieces[5] == '1' && $pieces[6] && !empty($pieces[6]) && $pieces[7] &&
+     in_array($pieces[7], ['1']) && $pieces[8] && in_array($pieces[8], ['1','2','3','4','5']) 
+     && $pieces[9] && !empty($pieces[9]) && $pieces[10] && !empty($pieces[10])){
+        $response = "CON Please enter your date of birth \n";      
+    }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2]
+    && $pieces[5] && $pieces[5] == '1'
+    && $pieces[6] && !empty($pieces[6]) && $pieces[7] && in_array($pieces[7], ['1']) && $pieces[8] && 
+    in_array($pieces[8], ['1','2','3','4','5']) && $pieces[9] && !empty($pieces[9]) && $pieces[10] && !empty($pieces[10])
+     && $pieces[11] && !empty($pieces[11])){
+        $result = BankCheckout($pieces[9],$pieces[10],$bank_code, $pieces[11]);
+        if($result->status == 'PendingValidation'){
+        $totality = true;
+        $response = "CON Please enter the OTP sent to you \n";    
+        }else{
+        $response = "END".$response->description;    
+        }         
+    }else if($totality && $pieces[12] && !empty($pieces[12])){
+        $result_v = BankValidate($pieces[12], $result->transactionId);
+        if($result_v->status == 'Success'){
+         $sql = "INSERT INTO `users` (`phone_number`, `first_name`, `last_name`,`menu_id`,`plate_number`, `patron_id`, `paid`)
+                                                        VALUES ('$phoneNumber',
+                                                        '" . mysqli_real_escape_string($conn, $pieces[2]) . "',
+                                                        '" . mysqli_real_escape_string($conn, $pieces[3]) . "',
+                                                        '$pieces[0]',
+                                                         '" . mysqli_real_escape_string($conn, $pieces[4]) . "',
+                                                        '$pieces[1]', true)";
+                        $save_user = sqlInsert($sql);
+        if($save_user){
+        $sql2 = "INSERT INTO `referrals` (`user_id`, `phone_no`)
+        VALUES ('$conn->insert_id',
+        '" . mysqli_real_escape_string($conn, $pieces[6]) . "')";
+        $save_user2 = sqlInsert($sql2);  
+        $response = "END Congratulations you\'ll be contacted soon";     
+        }else{
+        $response = "END There was a problem while inserting your referral, please try again later";    
+        }                
+        $response = "END Congratulations you\'ve successfully registered";   
+        }else{
+        $response = "END".$result_v->description;    
+        }         
     }
     }
 }else{
