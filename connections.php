@@ -1,9 +1,9 @@
 <?php
 
-define("DB_HOST", "");
-define("DB_USERNAME", "");
+define("DB_HOST", "localhost");
+define("DB_USERNAME", "root");
 define("DB_PASSWORD", "");
-define("DB_DATABASE", "autorand");
+define("DB_DATABASE", "autorand_ussd");
 
 function conn()
 {

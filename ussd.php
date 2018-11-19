@@ -1,14 +1,14 @@
 <?php
 // 8 zeros(9)
-use AfricasTalking\SDK\AfricasTalking;
+//use AfricasTalking\SDK\AfricasTalking;
 $username = "sandbox";
 $apikey   = "ff4bd028356602b0aff181d10bdf8889c926052df21f52e35da1bc5007cace1c";
-$AT       = new AfricasTalking($username, $apiKey);
-$payments   = $AT->payments();
+//$AT       = new AfricasTalking($username, $apiKey);
+//$payments   = $AT->payments();
 $bank_code = '';
 $totality = false;
 $skylark = false;
-function BankValidate($otp, $transactionId) {
+/*function BankValidate($otp, $transactionId) {
     try {
         $result = $payments->bankCheckoutValidate([
             "transactionId" => $transactionId,
@@ -47,7 +47,7 @@ function BankCheckout($accountName, $accountNumber, $bankCode, $dateOfBirth) {
     } catch(Exception $e) {
         echo "Error: ".$e.getMessage();
     }
-}
+}*/
 require("connections.php");
 $conn = conn();
 // add referral option in menu
@@ -110,7 +110,8 @@ if($pieces[2] && !empty($pieces[2])){
     $response = "CON Please where you referred by anyone \n";
     $response .= "1. Yes \n";
     $response .= "2. No \n";
-}else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2]) 
+}
+else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3]) && $pieces[2] && !empty($pieces[2]) 
 && $pieces[5] && $pieces[5] == '1'){
     $response = "CON Please enter the phone number of who referred you \n";
 }else if($pieces[4] && !empty($pieces[4]) && $pieces[3] && !empty($pieces[3])&& $pieces[2] && !empty($pieces[2]) 
