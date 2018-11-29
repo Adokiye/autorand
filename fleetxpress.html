@@ -69,9 +69,9 @@
     padding: 10px;
 }       
 .budget-prospect{
-    left: 20px;
-    position: absolute;
-    top: 80px;
+    margin-left: 20px;
+    position: relative;
+    margin-top: 150px;
     -webkit-transition: opacity 300ms;
     transition: opacity 300ms;
 }
@@ -92,12 +92,30 @@
     top: 310px;	   
     }
     .footer {
-    position: fixed;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    color: white;
-    text-align: center;
+  position: relative;
+  height: auto;
+  clear: both;
+  text-align: center;
+  font-size: 12px;
+}
+@media screen and (max-width: 800px) {
+    .big-div { 
+    width:100%;
+    height: auto;    
+    display: none;
+    }
+    #icon{
+      display:inline-block;
+      width: 40px;
+      height: 40px;
+      margin-bottom: 10px;
+    }
+    .nav-item a {
+    padding: 10px;
+    } 
+    .budget-prospect{
+      width: 100%;
+    }
 }
             </style>
 </head>
@@ -157,5 +175,8 @@
             <div class="rounder"><p style="color:dodgerblue">MANAGE COMMERCIAL VEHICLES THE SMART WAY!
             </p></div><p style="color:white">We pay, even when drivers default<br>Dial *699# to start for free!
                 </p></div>
+                <div class="footer">
+                        All rights reserved. Mendelsmooore 2018. Contact: 7th Floor, No 23 Agodogba Avenue, <br/>Park-view estate, Ikoyi-Lagos. 08067244917. <br/>Suite 8, Habiba plaza, off IBB way Maitama-Abuja. 08088548702.<br/>Email: info@oyenge.com.
+                </div>
     </body>
 </html>
