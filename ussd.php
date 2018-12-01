@@ -1,4 +1,6 @@
 <?php
+// info@mendelsmore.com -- &ANpk!qjabYU
+// mendelsnzeh@mendelsmore.com -- june1985$
 // 8 zeros(9)
 //use AfricasTalking\SDK\AfricasTalking;
 $username = "sandbox";
