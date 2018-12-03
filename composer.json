@@ -1,5 +1,6 @@
 {
     "require": {
-        "africastalking/africastalking": "^2.1"
+        "africastalking/africastalking": "^2.1",
+        "phpmailer/phpmailer": "^6.0"
     }
 }
